@@ -4,7 +4,6 @@ import { FiArrowRight, FiPlay } from "react-icons/fi";
 function Hero() {
   return (
     <section className="relative overflow-hidden bg-[#f7f3ee]">
-      Decorative background
       <div className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl items-center gap-12 px-5 py-14 sm:px-8 md:py-20 lg:grid-cols-2 lg:gap-16 lg:px-10 lg:py-24">
         {/* Content */}
         <motion.div

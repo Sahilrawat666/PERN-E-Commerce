@@ -8,6 +8,7 @@ import {
   FiUser,
   FiX,
 } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -19,6 +20,7 @@ const navLinks = [
 function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#e5ddd4] bg-[#f7f3ee]/95 shadow-[0_2px_20px_rgba(36,28,24,0.05)] backdrop-blur-md">
@@ -59,14 +61,56 @@ function Navbar() {
           </button>
 
           {/* Account */}
-          <a
-            href="/account"
-            aria-label="Account"
-            className="hidden rounded-full p-2.5 text-[#786f68] transition-all duration-300 hover:bg-[#ebe3da] hover:text-[#b08d57] sm:block"
-          >
-            <FiUser size={20} strokeWidth={1.7} />
-          </a>
+          <div className="relative hidden sm:block">
+            <button
+              type="button"
+              aria-label="Account"
+              onClick={() => setAccountOpen((current) => !current)}
+              className="rounded-full p-2.5 text-[#786f68] transition-all duration-300 hover:bg-[#ebe3da] hover:text-[#b08d57] cursor-pointer"
+            >
+              <FiUser size={20} strokeWidth={1.7} />
+            </button>
 
+            <AnimatePresence>
+              {accountOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.97 }}
+                  transition={{ duration: 0.18 }}
+                  className="absolute right-0 top-14 w-56 overflow-hidden rounded-2xl border border-[#e5ddd4] bg-[#f7f3ee] p-2 shadow-xl"
+                >
+                  <div className="px-3 py-3">
+                    <p className="text-sm font-semibold text-[#241c18]">
+                      Welcome to LUXE
+                    </p>
+
+                    <p className="mt-1 text-xs text-[#786f68]">
+                      Sign in to manage your account.
+                    </p>
+                  </div>
+
+                  <div className="my-1 h-px bg-[#e5ddd4]" />
+
+                  <Link
+                    to="/login"
+                    onClick={() => setAccountOpen(false)}
+                    className="block rounded-xl px-3 py-2.5 text-sm font-medium text-[#302923] transition-colors hover:bg-[#ebe3da] hover:text-[#b08d57]"
+                  >
+                    Sign In
+                  </Link>
+
+                  <Link
+                    to="/signup"
+                    onClick={() => setAccountOpen(false)}
+                    className="block rounded-xl px-3 py-2.5 text-sm font-medium text-[#302923] transition-colors hover:bg-[#ebe3da] hover:text-[#b08d57]"
+                  >
+                    Create Account
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           {/* Wishlist */}
           <a
             href="/wishlist"
@@ -133,7 +177,7 @@ function Navbar() {
               <button
                 type="button"
                 onClick={() => setSearchOpen(false)}
-                className="shrink-0 text-sm font-medium text-[#786f68] transition-colors hover:text-[#b08d57]"
+                className="shrink-0 text-sm font-medium text-[#786f68] transition-colors hover:text-[#b08d57] cursor-pointer"
               >
                 Close
               </button>
