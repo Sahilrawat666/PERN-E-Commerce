@@ -4,6 +4,7 @@ import { FiArrowLeft, FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { motion } from "framer-motion";
 import { useAuth } from "../src/context/AuthContext.jsx";
+import toast from "react-hot-toast";
 
 function Login() {
   const navigate = useNavigate();
@@ -56,6 +57,7 @@ function Login() {
       }, 800);
     } catch (error) {
       setError(error.message);
+      toast.error(error.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -77,6 +77,7 @@ function Signup() {
       }, 800);
     } catch (error) {
       setError(error.message);
+      toast.error(error.message || "Failed to create account.");
     } finally {
       setLoading(false);
     }
