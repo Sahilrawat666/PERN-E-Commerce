@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   FiHeart,
@@ -9,6 +9,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { useAuth } from "../src/context/AuthContext.jsx";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -21,6 +22,20 @@ function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  const accountRef = useRef(null);
+
+  useEffect(() => {
+    const close = (e) => {
+      if (!accountRef.current?.contains(e.target)) {
+        setAccountOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", close);
+
+    return () => document.removeEventListener("mousedown", close);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#e5ddd4] bg-[#f7f3ee]/95 shadow-[0_2px_20px_rgba(36,28,24,0.05)] backdrop-blur-md">
@@ -61,7 +76,7 @@ function Navbar() {
           </button>
 
           {/* Account */}
-          <div className="relative hidden sm:block">
+          <div ref={accountRef} className="relative hidden sm:block">
             <button
               type="button"
               aria-label="Account"
@@ -80,33 +95,92 @@ function Navbar() {
                   transition={{ duration: 0.18 }}
                   className="absolute right-0 top-14 w-56 overflow-hidden rounded-2xl border border-[#e5ddd4] bg-[#f7f3ee] p-2 shadow-xl"
                 >
-                  <div className="px-3 py-3">
-                    <p className="text-sm font-semibold text-[#241c18]">
-                      Welcome to LUXE
-                    </p>
+                  {!isAuthenticated ? (
+                    <>
+                      <div className="px-3 py-3">
+                        <p className="text-sm font-semibold text-[#241c18]">
+                          Welcome to LUXE
+                        </p>
 
-                    <p className="mt-1 text-xs text-[#786f68]">
-                      Sign in to manage your account.
-                    </p>
-                  </div>
+                        <p className="mt-1 text-xs text-[#786f68]">
+                          Sign in to manage your account.
+                        </p>
+                      </div>
 
-                  <div className="my-1 h-px bg-[#e5ddd4]" />
+                      <div className="my-1 h-px bg-[#e5ddd4]" />
 
-                  <Link
-                    to="/login"
-                    onClick={() => setAccountOpen(false)}
-                    className="block rounded-xl px-3 py-2.5 text-sm font-medium text-[#302923] transition-colors hover:bg-[#ebe3da] hover:text-[#b08d57]"
-                  >
-                    Sign In
-                  </Link>
+                      <Link
+                        to="/login"
+                        onClick={() => setAccountOpen(false)}
+                        className="block rounded-xl px-3 py-2.5 text-sm font-medium text-[#302923] transition-colors hover:bg-[#ebe3da] hover:text-[#b08d57]"
+                      >
+                        Sign In
+                      </Link>
 
-                  <Link
-                    to="/signup"
-                    onClick={() => setAccountOpen(false)}
-                    className="block rounded-xl px-3 py-2.5 text-sm font-medium text-[#302923] transition-colors hover:bg-[#ebe3da] hover:text-[#b08d57]"
-                  >
-                    Create Account
-                  </Link>
+                      <Link
+                        to="/signup"
+                        onClick={() => setAccountOpen(false)}
+                        className="block rounded-xl px-3 py-2.5 text-sm font-medium text-[#302923] transition-colors hover:bg-[#ebe3da] hover:text-[#b08d57]"
+                      >
+                        Create Account
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <div className="px-3 py-3">
+                        <p className="text-xs font-medium uppercase tracking-wider text-[#b08d57]">
+                          Welcome back
+                        </p>
+
+                        <p className="mt-1 truncate text-sm font-semibold text-[#241c18]">
+                          {user.name}
+                        </p>
+
+                        <p className="mt-1 truncate text-xs text-[#786f68]">
+                          {user.email}
+                        </p>
+                      </div>
+
+                      <div className="my-1 h-px bg-[#e5ddd4]" />
+
+                      <Link
+                        to="/account"
+                        onClick={() => setAccountOpen(false)}
+                        className="block rounded-xl px-3 py-2.5 text-sm font-medium text-[#302923] transition-colors hover:bg-[#ebe3da] hover:text-[#b08d57]"
+                      >
+                        My Account
+                      </Link>
+
+                      <Link
+                        to="/orders"
+                        onClick={() => setAccountOpen(false)}
+                        className="block rounded-xl px-3 py-2.5 text-sm font-medium text-[#302923] transition-colors hover:bg-[#ebe3da] hover:text-[#b08d57]"
+                      >
+                        My Orders
+                      </Link>
+
+                      <Link
+                        to="/wishlist"
+                        onClick={() => setAccountOpen(false)}
+                        className="block rounded-xl px-3 py-2.5 text-sm font-medium text-[#302923] transition-colors hover:bg-[#ebe3da] hover:text-[#b08d57]"
+                      >
+                        Wishlist
+                      </Link>
+
+                      <div className="my-1 h-px bg-[#e5ddd4]" />
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          logout();
+                          setAccountOpen(false);
+                        }}
+                        className="w-full rounded-xl px-3 py-2.5 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
