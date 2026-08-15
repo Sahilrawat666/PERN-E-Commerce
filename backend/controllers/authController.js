@@ -4,7 +4,7 @@ import { OAuth2Client } from "google-auth-library";
 import pool from "../config/db.js";
 
 const googleClient = new OAuth2Client(
-    process.env.GOOGLE_CLIENT_ID
+    process.env.VITE_GOOGLE_CLIENT_ID
 );
 
 const generateToken = (user) => {
@@ -167,7 +167,7 @@ export const googleLogin = async (req, res) => {
 
         const ticket = await googleClient.verifyIdToken({
             idToken: credential,
-            audience: process.env.GOOGLE_CLIENT_ID,
+            audience: process.env.VITE_GOOGLE_CLIENT_ID,
         });
 
         const payload = ticket.getPayload();

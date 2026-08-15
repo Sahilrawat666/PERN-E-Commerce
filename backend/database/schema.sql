@@ -7,3 +7,21 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+-- PRODUCTS
+CREATE TABLE IF NOT EXISTS products (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    category VARCHAR(100) NOT NULL,
+    gender VARCHAR(20),
+    price DECIMAL(10, 2) NOT NULL,
+    original_price DECIMAL(10, 2),
+    discount INTEGER DEFAULT 0,
+    image_url TEXT,
+    rating DECIMAL(2, 1) DEFAULT 0,
+    stock INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -5,10 +5,11 @@ import { FcGoogle } from "react-icons/fc";
 import { motion } from "framer-motion";
 import { useAuth } from "../src/context/AuthContext.jsx";
 import toast from "react-hot-toast";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, googleLogin } = useAuth();
 
   const [form, setForm] = useState({
     email: "",
@@ -25,7 +26,49 @@ function Login() {
       [event.target.name]: event.target.value,
     });
   };
+  // google login
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        setLoading(true);
+        setError("");
 
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/auth/google`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              access_token: tokenResponse.access_token,
+            }),
+          },
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Google login failed.");
+        }
+
+        googleLogin(data);
+
+        navigate("/");
+      } catch (error) {
+        console.error("Google login error:", error);
+
+        setError(error.message);
+        toast.error(error.message || "Google login failed.");
+      } finally {
+        setLoading(false);
+      }
+    },
+
+    onError: () => {
+      toast.error("Google login failed. Please try again.");
+    },
+  });
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -166,6 +209,7 @@ function Login() {
             {/* Google */}
             <button
               type="button"
+              onClick={handleGoogleLogin}
               className="group flex w-full items-center justify-center gap-3 rounded-xl border border-[#ddd5cc] bg-white px-5 py-3.5 text-sm font-medium text-[#302923] transition-all duration-300 hover:border-[#b08d57] hover:shadow-md cursor-pointer"
             >
               <FcGoogle size={20} />

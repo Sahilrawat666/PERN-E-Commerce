@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(
     () => localStorage.getItem("luxe_token") || null,
   );
-
+  // login
   const login = (data) => {
     localStorage.setItem("luxe_token", data.token);
     localStorage.setItem("luxe_user", JSON.stringify(data.user));
@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
 
     toast.success(data.message || "Login successful!");
   };
-
+  // signup
   const signup = (data) => {
     localStorage.setItem("luxe_token", data.token);
     localStorage.setItem("luxe_user", JSON.stringify(data.user));
@@ -38,7 +38,18 @@ export function AuthProvider({ children }) {
 
     toast.success(data.message || "Account created successfully!");
   };
+  // Google login
+  const googleLogin = (data) => {
+    localStorage.setItem("luxe_token", data.token);
+    localStorage.setItem("luxe_user", JSON.stringify(data.user));
 
+    setToken(data.token);
+    setUser(data.user);
+
+    toast.success(data.message || "Google login successful!");
+  };
+
+  // logout
   const logout = () => {
     localStorage.removeItem("luxe_token");
     localStorage.removeItem("luxe_user");
@@ -55,6 +66,7 @@ export function AuthProvider({ children }) {
     isAuthenticated: Boolean(token && user),
     login,
     signup,
+    googleLogin,
     logout,
   };
 
