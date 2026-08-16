@@ -41,7 +41,7 @@ function Login() {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              access_token: tokenResponse.access_token,
+              accessToken: tokenResponse.access_token,
             }),
           },
         );
@@ -51,9 +51,8 @@ function Login() {
         if (!response.ok) {
           throw new Error(data.message || "Google login failed.");
         }
-
         googleLogin(data);
-
+        console.log(data);
         navigate("/");
       } catch (error) {
         console.error("Google login error:", error);
@@ -66,9 +65,10 @@ function Login() {
     },
 
     onError: () => {
-      toast.error("Google login failed. Please try again.");
+      toast.error("Google login failed.");
     },
   });
+  //  submit
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -209,7 +209,7 @@ function Login() {
             {/* Google */}
             <button
               type="button"
-              onClick={handleGoogleLogin}
+              onClick={() => handleGoogleLogin()}
               className="group flex w-full items-center justify-center gap-3 rounded-xl border border-[#ddd5cc] bg-white px-5 py-3.5 text-sm font-medium text-[#302923] transition-all duration-300 hover:border-[#b08d57] hover:shadow-md cursor-pointer"
             >
               <FcGoogle size={20} />

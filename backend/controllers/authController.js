@@ -4,7 +4,7 @@ import { OAuth2Client } from "google-auth-library";
 import pool from "../config/db.js";
 
 const googleClient = new OAuth2Client(
-    process.env.VITE_GOOGLE_CLIENT_ID
+    process.env.GOOGLE_CLIENT_ID
 );
 
 const generateToken = (user) => {
@@ -156,21 +156,32 @@ export const login = async (req, res) => {
 
 export const googleLogin = async (req, res) => {
     try {
-        const { credential } = req.body;
+        const { accessToken } = req.body;
 
-        if (!credential) {
+        if (!accessToken) {
             return res.status(400).json({
                 success: false,
-                message: "Google credential is required.",
+                message: "Google access token is required.",
             });
         }
 
-        const ticket = await googleClient.verifyIdToken({
-            idToken: credential,
-            audience: process.env.VITE_GOOGLE_CLIENT_ID,
-        });
+        const googleResponse = await fetch(
+            "https://www.googleapis.com/oauth2/v3/userinfo",
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
 
-        const payload = ticket.getPayload();
+        if (!googleResponse.ok) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid Google access token.",
+            });
+        }
+
+        const googleUser = await googleResponse.json();
 
         const {
             sub: googleId,
@@ -178,18 +189,20 @@ export const googleLogin = async (req, res) => {
             name,
             picture,
             email_verified: emailVerified,
-        } = payload;
+        } = googleUser;
 
-        if (!emailVerified) {
+        if (!email || !emailVerified) {
             return res.status(400).json({
                 success: false,
-                message: "Google email is not verified.",
+                message: "Google email could not be verified.",
             });
         }
 
+        const normalizedEmail = email.trim().toLowerCase();
+
         const existingUser = await pool.query(
             "SELECT * FROM users WHERE email = $1",
-            [email.toLowerCase()]
+            [normalizedEmail]
         );
 
         let user;
@@ -199,25 +212,31 @@ export const googleLogin = async (req, res) => {
 
             await pool.query(
                 `
-        UPDATE users
-        SET google_id = $1,
-            avatar_url = $2,
-            updated_at = CURRENT_TIMESTAMP
-        WHERE id = $3
-        `,
+                UPDATE users
+                SET google_id = $1,
+                    avatar_url = $2,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE id = $3
+                `,
                 [googleId, picture || null, user.id]
             );
+
+            user = {
+                ...user,
+                google_id: googleId,
+                avatar_url: picture || null,
+            };
         } else {
             const result = await pool.query(
                 `
-        INSERT INTO users
-        (name, email, google_id, avatar_url)
-        VALUES ($1, $2, $3, $4)
-        RETURNING id, name, email, avatar_url, created_at
-        `,
+                INSERT INTO users
+                (name, email, google_id, avatar_url)
+                VALUES ($1, $2, $3, $4)
+                RETURNING id, name, email, google_id, avatar_url, created_at
+                `,
                 [
                     name || "LUXE User",
-                    email.toLowerCase(),
+                    normalizedEmail,
                     googleId,
                     picture || null,
                 ]
@@ -228,7 +247,7 @@ export const googleLogin = async (req, res) => {
 
         const token = generateToken(user);
 
-        res.json({
+        return res.json({
             success: true,
             message: "Google login successful.",
             token,
@@ -242,9 +261,9 @@ export const googleLogin = async (req, res) => {
     } catch (error) {
         console.error("Google login error:", error);
 
-        res.status(401).json({
+        return res.status(500).json({
             success: false,
-            message: "Google authentication failed.",
+            message: "Something went wrong during Google login.",
         });
     }
 };

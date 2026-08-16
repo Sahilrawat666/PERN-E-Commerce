@@ -66,6 +66,7 @@ export function AuthProvider({ children }) {
     isAuthenticated: Boolean(token && user),
     login,
     signup,
+
     googleLogin,
     logout,
   };
