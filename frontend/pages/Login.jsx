@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
 import { FiArrowLeft, FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { motion } from "framer-motion";
@@ -19,6 +20,9 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
 
   const handleChange = (event) => {
     setForm({
@@ -51,9 +55,10 @@ function Login() {
         if (!response.ok) {
           throw new Error(data.message || "Google login failed.");
         }
-        googleLogin(data);
+
         console.log(data);
-        navigate("/");
+        googleLogin(data);
+        navigate(from, { replace: true });
       } catch (error) {
         console.error("Google login error:", error);
 
@@ -96,7 +101,7 @@ function Login() {
       login(data);
       console.log(data);
       setTimeout(() => {
-        navigate("/");
+        navigate(from, { replace: true });
       }, 800);
     } catch (error) {
       setError(error.message);
