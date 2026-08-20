@@ -18,11 +18,11 @@ const benefits = [
     icon: FiTruck,
     title: "Simple Delivery",
     description:
-      "Fast, reliable delivery and easy returns make shopping with LUXE effortless.",
+      "Fast, reliable delivery and easy returns make shopping with ZENOVA effortless.",
   },
 ];
 
-function WhyLuxe() {
+function WhyZenova() {
   return (
     <section className="bg-white px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
       <div className="mx-auto max-w-7xl">
@@ -37,7 +37,7 @@ function WhyLuxe() {
             <span className="h-px w-8 bg-[#b08d57]" />
 
             <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b08d57]">
-              The LUXE Difference
+              The ZENOVA Difference
             </span>
 
             <span className="h-px w-8 bg-[#b08d57]" />
@@ -84,4 +84,4 @@ function WhyLuxe() {
   );
 }
 
-export default WhyLuxe;
+export default WhyZenova;

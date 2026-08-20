@@ -20,7 +20,7 @@ const footerLinks = {
     { label: "Track Order", href: "/track-order" },
   ],
   Company: [
-    { label: "About LUXE", href: "/about" },
+    { label: "About ZENOVA", href: "/about" },
     { label: "Our Story", href: "/story" },
     { label: "Journal", href: "/journal" },
     { label: "Careers", href: "/careers" },
@@ -42,7 +42,7 @@ function Footer() {
           {/* Brand */}
           <div>
             <a href="/" className="text-2xl font-semibold tracking-[0.25em]">
-              LUXE
+              ZENOVA
             </a>
 
             <p className="mt-5 max-w-sm text-sm leading-6 text-[#b9aea4]">
@@ -51,11 +51,11 @@ function Footer() {
             </p>
 
             <a
-              href="mailto:hello@luxe.com"
+              href="mailto:hello@Zenova.com"
               className="mt-6 inline-flex items-center gap-2 text-sm text-[#d8b77d] transition-colors hover:text-white"
             >
               <FiMail size={16} />
-              hello@luxe.com
+              hello@Zenova.com
             </a>
 
             <div className="mt-7 flex gap-2">
@@ -110,7 +110,7 @@ function Footer() {
 
         <div className="mt-14 flex flex-col justify-between gap-5 border-t border-white/10 pt-7 sm:flex-row sm:items-center">
           <p className="text-xs text-[#8f837a]">
-            © 2026 LUXE. All rights reserved.
+            © 2026 ZENOVA. All rights reserved.
           </p>
 
           <div className="flex items-center gap-5">

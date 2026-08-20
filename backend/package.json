@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "LUXE PERN ecommerce backend",
+  "description": "ZENOVA PERN ecommerce backend",
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",

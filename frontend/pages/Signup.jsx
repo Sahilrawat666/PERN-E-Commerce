@@ -148,7 +148,7 @@ function Signup() {
                 to="/"
                 className="text-2xl font-medium tracking-[0.18em] text-[#211b18]"
               >
-                LUXE
+                ZENOVA
               </Link>
             </div>
 
@@ -168,7 +168,7 @@ function Signup() {
               </p>
 
               <h2 className="text-3xl font-semibold tracking-tight text-[#211b18] sm:text-4xl">
-                Join LUXE
+                Join ZENOVA
               </h2>
 
               <p className="mt-3 text-sm leading-6 text-[#81776e]">
@@ -386,7 +386,7 @@ function Signup() {
 
             {/* Terms */}
             <p className="mx-auto mt-7 max-w-sm text-center text-[10px] leading-5 text-[#aaa098]">
-              By creating an account, you agree to LUXE's Terms of Service and
+              By creating an account, you agree to ZENOVA's Terms of Service and
               Privacy Policy.
             </p>
           </motion.div>
@@ -402,7 +402,7 @@ function Signup() {
           {/* Top */}
           <div className="relative z-10 flex justify-end">
             <p className="text-[10px] uppercase tracking-[0.25em] text-white/30">
-              LUXE / 01
+              ZENOVA / 01
             </p>
           </div>
 
@@ -413,7 +413,7 @@ function Signup() {
             </p>
 
             <h1 className="text-7xl font-medium tracking-[0.18em] text-white xl:text-8xl">
-              LUXE
+              ZENOVA
             </h1>
 
             <div className="mt-8 h-px w-20 bg-[#b08d57]" />
@@ -431,7 +431,7 @@ function Signup() {
             </p>
 
             <p className="text-[10px] uppercase tracking-[0.25em] text-white/30">
-              Discover • Define • LUXE
+              Discover • Define • ZENOVA
             </p>
           </div>
         </section>

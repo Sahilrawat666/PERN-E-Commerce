@@ -47,7 +47,7 @@ function About() {
           className="mx-auto max-w-3xl text-center"
         >
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#b08d57]">
-            About LUXE
+            About ZENOVA
           </p>
 
           <h2 className="mt-5 text-4xl font-semibold tracking-tight text-[#241c18] sm:text-5xl lg:text-6xl">
@@ -58,7 +58,7 @@ function About() {
           </h2>
 
           <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-[#786f68] sm:text-base">
-            LUXE is built around a simple idea — everyday products can be
+            ZENOVA is built around a simple idea — everyday products can be
             functional, beautiful, and thoughtfully designed at the same time.
           </p>
         </motion.div>
@@ -78,13 +78,13 @@ function About() {
             <div className="relative overflow-hidden rounded-[2rem] bg-[#241c18]">
               <div className="aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5]">
                 {/* <img
-                  src="/images/about-luxe.jpg"
-                  alt="LUXE collection"
+                  src="/images/about-Zenova.jpg"
+                  alt="ZENOVA collection"
                   className="h-full w-full object-cover"
                 /> */}
                 <img
                   src="https://storesblock.com/cdn/shop/collections/Women-collection.jpg?v=1777834441&width=720"
-                  alt="LUXE collection"
+                  alt="ZENOVA collection"
                   className="h-full w-full object-cover"
                 />
               </div>
@@ -92,7 +92,7 @@ function About() {
               {/* Overlay */}
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#241c18]/80 via-[#241c18]/20 to-transparent p-6 sm:p-8">
                 <p className="text-xs font-medium uppercase tracking-[0.3em] text-[#d8b77d]">
-                  The LUXE philosophy
+                  The ZENOVA philosophy
                 </p>
 
                 <p className="mt-3 max-w-sm text-lg font-medium leading-7 text-white sm:text-xl">
@@ -136,7 +136,7 @@ function About() {
 
             <div className="mt-7 space-y-5 text-sm leading-7 text-[#786f68] sm:text-base">
               <p>
-                We created LUXE for people who appreciate the details. The
+                We created ZENOVA for people who appreciate the details. The
                 texture of a material, the balance of a silhouette, the way a
                 product fits naturally into your space.
               </p>
@@ -213,7 +213,7 @@ function About() {
           <div className="mx-auto mt-7 h-px w-12 bg-[#b08d57]" />
 
           <p className="mt-5 text-xs font-semibold uppercase tracking-[0.3em] text-[#d8b77d]">
-            The LUXE Standard
+            The ZENOVA Standard
           </p>
         </motion.div>
       </div>

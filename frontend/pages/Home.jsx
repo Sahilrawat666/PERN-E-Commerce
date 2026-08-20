@@ -4,7 +4,7 @@ import Hero from "../components/Hero";
 import FeaturedCollections from "../components/FeaturedCollections";
 import FeaturedProducts from "../components/FeaturedProducts";
 import PromoBanner from "../components/PromoBanner";
-import WhyLuxe from "../components/WhyLuxe";
+import WhyZenova from "../components/WhyZenova";
 import Newsletter from "../components/Newsletter";
 
 function Home() {
@@ -14,7 +14,7 @@ function Home() {
       <FeaturedCollections />
       <FeaturedProducts />
       <PromoBanner />
-      <WhyLuxe />
+      <WhyZenova />
       <Newsletter />
     </>
   );

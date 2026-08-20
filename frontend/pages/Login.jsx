@@ -144,7 +144,7 @@ function Login() {
             </p>
 
             <h1 className="text-7xl font-medium tracking-[0.18em] text-white xl:text-8xl">
-              LUXE
+              ZENOVA
             </h1>
 
             <div className="mt-8 h-px w-20 bg-[#b08d57]" />
@@ -162,7 +162,7 @@ function Login() {
             </p>
 
             <p className="text-[10px] uppercase tracking-[0.25em] text-white/30">
-              Discover • Define • LUXE
+              Discover • Define • ZENOVA
             </p>
           </div>
         </section>
@@ -181,7 +181,7 @@ function Login() {
                 to="/"
                 className="text-2xl font-medium tracking-[0.18em] text-[#211b18]"
               >
-                LUXE
+                ZENOVA
               </Link>
             </div>
 
@@ -196,7 +196,7 @@ function Login() {
               </h2>
 
               <p className="mt-3 text-sm leading-6 text-[#81776e]">
-                Enter your details to access your LUXE account.
+                Enter your details to access your ZENOVA account.
               </p>
             </div>
 
@@ -343,7 +343,7 @@ function Login() {
 
             {/* Terms */}
             <p className="mx-auto mt-8 max-w-sm text-center text-[10px] leading-5 text-[#aaa098]">
-              By continuing, you agree to LUXE's Terms of Service and Privacy
+              By continuing, you agree to ZENOVA's Terms of Service and Privacy
               Policy.
             </p>
           </motion.div>

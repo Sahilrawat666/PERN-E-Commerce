@@ -235,7 +235,7 @@ export const googleLogin = async (req, res) => {
                 RETURNING id, name, email, google_id, avatar_url, created_at
                 `,
                 [
-                    name || "LUXE User",
+                    name || "ZENOVA User",
                     normalizedEmail,
                     googleId,
                     picture || null,

@@ -5,25 +5,25 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("luxe_user");
+    const savedUser = localStorage.getItem("Zenova_user");
 
     try {
       return savedUser ? JSON.parse(savedUser) : null;
     } catch {
-      localStorage.removeItem("luxe_user");
+      localStorage.removeItem("Zenova_user");
       return null;
     }
   });
 
   const [token, setToken] = useState(
-    () => localStorage.getItem("luxe_token") || null,
+    () => localStorage.getItem("Zenova_token") || null,
   );
 
   const [authLoading, setAuthLoading] = useState(true);
   //verify authentication
   useEffect(() => {
     const verifyAuthentication = async () => {
-      const savedToken = localStorage.getItem("luxe_token");
+      const savedToken = localStorage.getItem("Zenova_token");
 
       if (!savedToken) {
         setAuthLoading(false);
@@ -46,15 +46,15 @@ export function AuthProvider({ children }) {
           throw new Error(data.message || "Authentication failed.");
         }
 
-        localStorage.setItem("luxe_user", JSON.stringify(data.user));
+        localStorage.setItem("Zenova_user", JSON.stringify(data.user));
 
         setToken(savedToken);
         setUser(data.user);
       } catch (error) {
         console.error("Authentication verification failed:", error);
 
-        localStorage.removeItem("luxe_token");
-        localStorage.removeItem("luxe_user");
+        localStorage.removeItem("Zenova_token");
+        localStorage.removeItem("Zenova_user");
 
         setToken(null);
         setUser(null);
@@ -67,8 +67,8 @@ export function AuthProvider({ children }) {
   }, []);
   //login
   const login = (data) => {
-    localStorage.setItem("luxe_token", data.token);
-    localStorage.setItem("luxe_user", JSON.stringify(data.user));
+    localStorage.setItem("Zenova_token", data.token);
+    localStorage.setItem("Zenova_user", JSON.stringify(data.user));
 
     setToken(data.token);
     setUser(data.user);
@@ -77,8 +77,8 @@ export function AuthProvider({ children }) {
   };
   //signup
   const signup = (data) => {
-    localStorage.setItem("luxe_token", data.token);
-    localStorage.setItem("luxe_user", JSON.stringify(data.user));
+    localStorage.setItem("Zenova_token", data.token);
+    localStorage.setItem("Zenova_user", JSON.stringify(data.user));
 
     setToken(data.token);
     setUser(data.user);
@@ -87,8 +87,8 @@ export function AuthProvider({ children }) {
   };
   //googlelogin
   const googleLogin = (data) => {
-    localStorage.setItem("luxe_token", data.token);
-    localStorage.setItem("luxe_user", JSON.stringify(data.user));
+    localStorage.setItem("Zenova_token", data.token);
+    localStorage.setItem("Zenova_user", JSON.stringify(data.user));
 
     setToken(data.token);
     setUser(data.user);
@@ -97,8 +97,8 @@ export function AuthProvider({ children }) {
   };
   //logout
   const logout = () => {
-    localStorage.removeItem("luxe_token");
-    localStorage.removeItem("luxe_user");
+    localStorage.removeItem("Zenova_token");
+    localStorage.removeItem("Zenova_user");
 
     setToken(null);
     setUser(null);

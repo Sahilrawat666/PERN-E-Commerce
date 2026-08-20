@@ -11,7 +11,7 @@ const startServer = async () => {
         console.log("Database connection successful");
 
         app.listen(PORT, () => {
-            console.log(`LUXE API running on http://localhost:${PORT}`);
+            console.log(`ZENOVA API running on http://localhost:${PORT}`);
         });
     } catch (error) {
         console.error("Failed to start server:", error);

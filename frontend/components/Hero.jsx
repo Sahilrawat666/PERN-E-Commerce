@@ -89,7 +89,7 @@ function Hero() {
             {/* Replace this URL with your actual product/hero image later */}
             <img
               src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=85"
-              alt="LUXE collection"
+              alt="ZENOVA collection"
               className="h-full w-full object-cover"
             />
 

@@ -18,7 +18,7 @@ function PromoBanner() {
 
           <div className="relative">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#d8b77d]">
-              LUXE Private Edit
+              ZENOVA Private Edit
             </p>
 
             <h2 className="mx-auto mt-5 max-w-2xl text-3xl font-medium tracking-tight text-white sm:text-4xl lg:text-5xl">
@@ -34,7 +34,7 @@ function PromoBanner() {
               href="/shop"
               className="group mt-8 inline-flex items-center gap-3 rounded-full bg-[#b08d57] px-7 py-3.5 text-sm font-medium text-white transition-colors hover:bg-[#927343]"
             >
-              Discover LUXE
+              Discover ZENOVA
               <FiArrowRight
                 size={17}
                 className="transition-transform group-hover:translate-x-1"

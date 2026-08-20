@@ -26,7 +26,7 @@ function Newsletter() {
 
         <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-[#786f68] sm:text-base">
           Be the first to discover new collections, exclusive edits, and
-          thoughtful inspiration from LUXE.
+          thoughtful inspiration from ZENOVA.
         </p>
 
         <form
@@ -59,7 +59,7 @@ function Newsletter() {
         </form>
 
         <p className="mt-4 text-[11px] text-[#a49b92]">
-          By subscribing, you agree to receive emails from LUXE.
+          By subscribing, you agree to receive emails from ZENOVA.
         </p>
       </div>
     </section>

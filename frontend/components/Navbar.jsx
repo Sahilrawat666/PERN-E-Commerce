@@ -45,7 +45,7 @@ function Navbar() {
           href="/"
           className="shrink-0 text-2xl font-semibold tracking-[0.25em] text-[#241c18] transition-colors duration-300 hover:text-[#b08d57]"
         >
-          LUXE
+          ZENOVA
         </a>
 
         {/* Desktop Navigation */}
@@ -99,7 +99,7 @@ function Navbar() {
                     <>
                       <div className="px-3 py-3">
                         <p className="text-sm font-semibold text-[#241c18]">
-                          Welcome to LUXE
+                          Welcome to ZENOVA
                         </p>
 
                         <p className="mt-1 text-xs text-[#786f68]">

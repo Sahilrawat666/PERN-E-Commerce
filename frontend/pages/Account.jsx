@@ -10,7 +10,7 @@ function Account() {
           className="mb-8 inline-flex items-center gap-2 text-sm text-[#786f68] transition-colors hover:text-[#b08d57]"
         >
           <FiArrowLeft size={16} />
-          Back to LUXE
+          Back to ZENOVA
         </a>
 
         <div className="bg-white p-7 shadow-[0_10px_40px_rgba(36,28,24,0.06)] sm:p-10">
@@ -20,7 +20,7 @@ function Account() {
             </p>
 
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[#241c18]">
-              LUXE
+              ZENOVA
             </h1>
 
             <p className="mt-3 text-sm text-[#786f68]">
