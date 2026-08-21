@@ -7,6 +7,8 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import About from "../pages/About";
 import ProtectedRoute from "../components/ProtectedRoute";
+import Shop from "../pages/Shop";
+import ProductDetails from "../pages/ProductDetails";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/about" element={<About />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>
             {/* <Route path="/account" element={<Accoun />} /> */}

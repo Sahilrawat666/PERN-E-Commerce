@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FiHeart, FiShoppingBag, FiStar } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 function ProductCard({ product }) {
   const [liked, setLiked] = useState(false);
@@ -15,12 +16,14 @@ function ProductCard({ product }) {
     >
       {/* Image */}
       <div className="relative aspect-[4/5] overflow-hidden bg-[#eee7df]">
-        <img
-          src={product.image}
-          alt={product.name}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-        />
+        <Link to={`/products/${product.id}`}>
+          <img
+            src={product.image_url}
+            alt={product.name}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          />
+        </Link>
 
         {/* Badge */}
         {product.badge && (
