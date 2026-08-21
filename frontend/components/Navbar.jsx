@@ -175,7 +175,7 @@ function Navbar() {
                           logout();
                           setAccountOpen(false);
                         }}
-                        className="w-full rounded-xl px-3 py-2.5 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+                        className="w-full rounded-xl cursor-pointer px-3 py-2.5 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
                       >
                         Logout
                       </button>
@@ -290,21 +290,34 @@ function Navbar() {
                 ))}
 
                 <div className="flex gap-3 pt-5 sm:hidden">
-                  <a
-                    href="/account"
-                    className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[#d8cec3] bg-white py-3 text-sm font-medium text-[#302923] transition-all hover:border-[#b08d57] hover:text-[#b08d57]"
-                  >
-                    <FiUser size={18} />
-                    Account
-                  </a>
+                  {!isAuthenticated ? (
+                    <Link
+                      to="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[#d8cec3] bg-white py-3 text-sm font-medium text-[#302923] transition-all hover:border-[#b08d57] hover:text-[#b08d57]"
+                    >
+                      <FiUser size={18} />
+                      Sign In
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/account"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[#d8cec3] bg-white py-3 text-sm font-medium text-[#302923] transition-all hover:border-[#b08d57] hover:text-[#b08d57]"
+                    >
+                      <FiUser size={18} />
+                      Account
+                    </Link>
+                  )}
 
-                  <a
-                    href="/wishlist"
+                  <Link
+                    to="/wishlist"
+                    onClick={() => setMobileMenuOpen(false)}
                     className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[#d8cec3] bg-white py-3 text-sm font-medium text-[#302923] transition-all hover:border-[#b08d57] hover:text-[#b08d57]"
                   >
                     <FiHeart size={18} />
                     Wishlist
-                  </a>
+                  </Link>
                 </div>
               </div>
             </nav>
