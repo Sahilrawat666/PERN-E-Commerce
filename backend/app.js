@@ -3,6 +3,8 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import authRoutes from "./routes/authRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+
 
 const app = express();
 app.use(
@@ -18,6 +20,7 @@ app.use(express.json());
 
 // routes
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
 
 app.get("/api/health", (req, res) => {
     res.status(200).json({

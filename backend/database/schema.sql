@@ -16,12 +16,12 @@ CREATE TABLE IF NOT EXISTS products (
     description TEXT,
     category VARCHAR(100) NOT NULL,
     gender VARCHAR(20),
-    price DECIMAL(10, 2) NOT NULL,
-    original_price DECIMAL(10, 2),
-    discount INTEGER DEFAULT 0,
+    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
+    original_price DECIMAL(10, 2) CHECK (original_price >= 0),
+    discount INTEGER DEFAULT 0 CHECK (discount >= 0 AND discount <= 100),
     image_url TEXT,
-    rating DECIMAL(2, 1) DEFAULT 0,
-    stock INTEGER DEFAULT 0,
+    rating DECIMAL(2, 1) DEFAULT 0 CHECK (rating >= 0 AND rating <= 5),
+    stock INTEGER DEFAULT 0 CHECK (stock >= 0),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
