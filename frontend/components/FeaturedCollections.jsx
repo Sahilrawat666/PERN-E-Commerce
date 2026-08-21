@@ -1,31 +1,43 @@
 import { motion } from "framer-motion";
 import { FiArrowUpRight } from "react-icons/fi";
-
-const collections = [
-  {
-    title: "New Arrivals",
-    subtitle: "Freshly curated",
-    image:
-      "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1000&q=85",
-    href: "/shop?collection=new-arrivals",
-  },
-  {
-    title: "Timeless Essentials",
-    subtitle: "Designed to last",
-    image:
-      "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1000&q=85",
-    href: "/shop?collection=essentials",
-  },
-  {
-    title: "The Edit",
-    subtitle: "Our signature pieces",
-    image:
-      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1000&q=85",
-    href: "/shop?collection=the-edit",
-  },
-];
+import { Link } from "react-router-dom";
+import { useProducts } from "../src/context/ProductContext.jsx";
 
 function FeaturedCollections() {
+  const { products, productsLoading, productsError } = useProducts();
+
+  // Use real products from Neon as collection cover images.
+  const newArrivalsProduct = [...products].sort((a, b) => b.id - a.id)[0];
+
+  const menProduct = products.find(
+    (product) => product.gender?.toLowerCase() === "men",
+  );
+
+  const womenProduct = products.find(
+    (product) => product.gender?.toLowerCase() === "women",
+  );
+
+  const collections = [
+    {
+      title: "New Arrivals",
+      subtitle: "Freshly curated",
+      image: newArrivalsProduct?.image_url,
+      href: "/shop",
+    },
+    {
+      title: "Men's Edit",
+      subtitle: "Refined essentials",
+      image: menProduct?.image_url,
+      href: "/shop?gender=Men",
+    },
+    {
+      title: "Women's Edit",
+      subtitle: "Modern elegance",
+      image: womenProduct?.image_url,
+      href: "/shop?gender=Women",
+    },
+  ];
+
   return (
     <section className="bg-white px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
       <div className="mx-auto max-w-7xl">
@@ -51,8 +63,8 @@ function FeaturedCollections() {
             </h2>
           </div>
 
-          <a
-            href="/shop"
+          <Link
+            to="/collections"
             className="group inline-flex items-center gap-2 self-start text-sm font-medium text-[#302923] transition-colors hover:text-[#b08d57] sm:self-auto"
           >
             View all
@@ -60,54 +72,82 @@ function FeaturedCollections() {
               size={17}
               className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
             />
-          </a>
+          </Link>
         </motion.div>
 
-        {/* Collection Cards */}
-        <div className="grid gap-5 md:grid-cols-3">
-          {collections.map((collection, index) => (
-            <motion.a
-              key={collection.title}
-              href={collection.href}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.1,
-              }}
-              className="group relative block aspect-[4/5] overflow-hidden bg-[#e9e0d6]"
-            >
-              {/* Image */}
-              <img
-                src={collection.image}
-                alt={collection.title}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        {/* Loading */}
+        {productsLoading && (
+          <div className="grid gap-5 md:grid-cols-3">
+            {[1, 2, 3].map((item) => (
+              <div
+                key={item}
+                className="aspect-[4/5] animate-pulse bg-[#e9e0d6]"
               />
+            ))}
+          </div>
+        )}
 
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#241c18]/70 via-[#241c18]/10 to-transparent" />
+        {/* Error */}
+        {!productsLoading && productsError && (
+          <div className="py-16 text-center">
+            <p className="text-sm text-red-600">{productsError}</p>
+          </div>
+        )}
 
-              {/* Content */}
-              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#d8b77d]">
-                  {collection.subtitle}
-                </p>
+        {/* Collection Cards */}
+        {!productsLoading && !productsError && products.length > 0 && (
+          <div className="grid gap-5 md:grid-cols-3">
+            {collections.map((collection, index) => (
+              <motion.div
+                key={collection.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{
+                  duration: 0.6,
+                  delay: index * 0.1,
+                }}
+              >
+                <Link
+                  to={collection.href}
+                  className="group relative block aspect-[4/5] overflow-hidden bg-[#e9e0d6]"
+                >
+                  {/* Image */}
+                  {collection.image ? (
+                    <img
+                      src={collection.image}
+                      alt={collection.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="h-full w-full bg-[#e9e0d6]" />
+                  )}
 
-                <div className="flex items-end justify-between gap-4">
-                  <h3 className="text-2xl font-medium tracking-tight text-white sm:text-3xl">
-                    {collection.title}
-                  </h3>
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#241c18]/70 via-[#241c18]/10 to-transparent" />
 
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/40 bg-white/10 text-white backdrop-blur-sm transition-all duration-300 group-hover:border-[#b08d57] group-hover:bg-[#b08d57]">
-                    <FiArrowUpRight size={18} />
-                  </span>
-                </div>
-              </div>
-            </motion.a>
-          ))}
-        </div>
+                  {/* Content */}
+                  <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#d8b77d]">
+                      {collection.subtitle}
+                    </p>
+
+                    <div className="flex items-end justify-between gap-4">
+                      <h3 className="text-2xl font-medium tracking-tight text-white sm:text-3xl">
+                        {collection.title}
+                      </h3>
+
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/40 bg-white/10 text-white backdrop-blur-sm transition-all duration-300 group-hover:border-[#b08d57] group-hover:bg-[#b08d57]">
+                        <FiArrowUpRight size={18} />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

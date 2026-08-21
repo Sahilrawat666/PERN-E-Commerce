@@ -9,6 +9,7 @@ import About from "../pages/About";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Shop from "../pages/Shop";
 import ProductDetails from "../pages/ProductDetails";
+import Collections from "../pages/Collections";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/collections" element={<Collections />} />
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>
             {/* <Route path="/account" element={<Accoun />} /> */}

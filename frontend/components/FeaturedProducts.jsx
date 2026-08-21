@@ -1,52 +1,21 @@
 import { motion } from "framer-motion";
 import { FiArrowUpRight } from "react-icons/fi";
+import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
-
-const products = [
-  {
-    id: 1,
-    name: "Linen Relaxed Shirt",
-    category: "Men",
-    price: "₹2,499",
-    rating: "4.9",
-    badge: "New",
-    image:
-      "https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 2,
-    name: "Structured Leather Bag",
-    category: "Accessories",
-    price: "₹4,999",
-    rating: "4.8",
-    badge: "Bestseller",
-    image:
-      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 3,
-    name: "Minimal Gold Watch",
-    category: "Accessories",
-    price: "₹6,499",
-    rating: "4.9",
-    image:
-      "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 4,
-    name: "Classic Wool Coat",
-    category: "Women",
-    price: "₹7,999",
-    rating: "5.0",
-    image:
-      "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=900&q=85",
-  },
-];
+import { useProducts } from "../src/context/ProductContext.jsx";
 
 function FeaturedProducts() {
+  const { products, productsLoading, productsError } = useProducts();
+
+  // Show the highest-rated products first.
+  const featuredProducts = [...products]
+    .sort((a, b) => Number(b.rating) - Number(a.rating))
+    .slice(0, 4);
+
   return (
     <section className="bg-[#f7f3ee] px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
       <div className="mx-auto max-w-7xl">
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -72,8 +41,8 @@ function FeaturedProducts() {
             </p>
           </div>
 
-          <a
-            href="/shop"
+          <Link
+            to="/shop"
             className="group inline-flex items-center gap-2 text-sm font-medium text-[#302923] hover:text-[#b08d57]"
           >
             Shop all
@@ -81,14 +50,50 @@ function FeaturedProducts() {
               size={17}
               className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
             />
-          </a>
+          </Link>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {/* Loading */}
+        {productsLoading && (
+          <div className="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            {[1, 2, 3, 4].map((item) => (
+              <div key={item} className="animate-pulse">
+                <div className="aspect-[3/4] bg-[#ebe5de]" />
+
+                <div className="mt-4 h-4 w-2/3 rounded bg-[#ebe5de]" />
+
+                <div className="mt-2 h-4 w-1/3 rounded bg-[#ebe5de]" />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Error */}
+        {!productsLoading && productsError && (
+          <div className="py-16 text-center">
+            <p className="text-sm text-red-600">{productsError}</p>
+          </div>
+        )}
+
+        {/* Products */}
+        {!productsLoading && !productsError && featuredProducts.length > 0 && (
+          <div className="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
+
+        {/* No products */}
+        {!productsLoading &&
+          !productsError &&
+          featuredProducts.length === 0 && (
+            <div className="py-16 text-center">
+              <p className="text-sm text-[#786f68]">
+                No featured products available.
+              </p>
+            </div>
+          )}
       </div>
     </section>
   );
