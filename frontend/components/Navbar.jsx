@@ -8,7 +8,7 @@ import {
   FiUser,
   FiX,
 } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../src/context/AuthContext.jsx";
 
 const navLinks = [
@@ -23,7 +23,24 @@ function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
   const accountRef = useRef(null);
+
+  // search products
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    const query = searchQuery.trim();
+
+    if (!query) {
+      return;
+    }
+
+    navigate(`/shop?search=${encodeURIComponent(query)}`);
+
+    setSearchOpen(false);
+  };
 
   useEffect(() => {
     const close = (e) => {
@@ -229,6 +246,7 @@ function Navbar() {
       </div>
 
       {/* Search Panel */}
+      {/* Search Panel */}
       <AnimatePresence>
         {searchOpen && (
           <motion.div
@@ -236,26 +254,41 @@ function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="overflow-hidden border-t border-[#e5ddd4] z-50"
+            className="z-50 overflow-hidden border-t border-[#e5ddd4]"
           >
-            <div className="mx-auto flex max-w-7xl items-center gap-3 px-5 py-4 sm:px-8 lg:px-10">
+            <form
+              onSubmit={handleSearch}
+              className="mx-auto flex max-w-7xl items-center gap-3 px-5 py-4 sm:px-8 lg:px-10"
+            >
               <FiSearch size={20} className="shrink-0 text-[#b08d57]" />
 
               <input
                 type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search products..."
                 autoFocus
                 className="w-full bg-transparent text-sm text-[#241c18] outline-none placeholder:text-[#a49b92]"
               />
 
               <button
+                type="submit"
+                className="shrink-0 cursor-pointer text-sm font-medium text-[#786f68] transition-colors hover:text-[#b08d57]"
+              >
+                Search
+              </button>
+
+              <button
                 type="button"
-                onClick={() => setSearchOpen(false)}
-                className="shrink-0 text-sm font-medium text-[#786f68] transition-colors hover:text-[#b08d57] cursor-pointer"
+                onClick={() => {
+                  setSearchOpen(false);
+                  setSearchQuery("");
+                }}
+                className="shrink-0 cursor-pointer text-sm font-medium text-[#786f68] transition-colors hover:text-[#b08d57]"
               >
                 Close
               </button>
-            </div>
+            </form>
           </motion.div>
         )}
       </AnimatePresence>

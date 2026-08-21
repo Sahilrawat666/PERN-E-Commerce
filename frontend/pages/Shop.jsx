@@ -1,12 +1,15 @@
 import { useMemo } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard.jsx";
 import { useProducts } from "../src/context/ProductContext.jsx";
+// import { useSearchParams } from "react-router-dom";
 
 function Shop() {
   const { products, productsLoading, productsError } = useProducts();
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const searchQuery = searchParams.get("search")?.trim().toLowerCase() || "";
 
   const selectedCategory = searchParams.get("category");
   const selectedGender = searchParams.get("gender");
@@ -21,10 +24,16 @@ function Shop() {
         !selectedGender ||
         product.gender?.toLowerCase() === selectedGender.toLowerCase();
 
-      return categoryMatches && genderMatches;
-    });
-  }, [products, selectedCategory, selectedGender]);
+      const searchMatches =
+        !searchQuery ||
+        product.name?.toLowerCase().includes(searchQuery) ||
+        product.description?.toLowerCase().includes(searchQuery) ||
+        product.category?.toLowerCase().includes(searchQuery) ||
+        product.gender?.toLowerCase().includes(searchQuery);
 
+      return categoryMatches && genderMatches && searchMatches;
+    });
+  }, [products, searchQuery, selectedCategory, selectedGender]);
   const clearFilters = () => {
     setSearchParams({});
   };
@@ -39,18 +48,20 @@ function Shop() {
           </p>
 
           <h1 className="mt-3 text-4xl font-light tracking-tight text-[#302923] md:text-5xl">
-            {selectedCategory ||
-              (selectedGender ? `${selectedGender}'s Collection` : "Shop")}
+            {searchQuery
+              ? `Search results for "${searchQuery}"`
+              : selectedCategory ||
+                (selectedGender ? `${selectedGender}'s Collection` : "Shop")}
           </h1>
-
           <p className="mt-4 max-w-xl text-sm leading-6 text-[#81776e]">
-            {selectedCategory
-              ? `Explore our ${selectedCategory.toLowerCase()} collection.`
-              : selectedGender
-                ? `Discover our curated selection for ${selectedGender.toLowerCase()}.`
-                : "Discover thoughtfully designed essentials created for a refined, modern wardrobe."}
+            {searchQuery
+              ? `Showing products matching "${searchQuery}".`
+              : selectedCategory
+                ? `Explore our ${selectedCategory.toLowerCase()} collection.`
+                : selectedGender
+                  ? `Discover our curated selection for ${selectedGender.toLowerCase()}.`
+                  : "Discover thoughtfully designed essentials created for a refined, modern wardrobe."}
           </p>
-
           {/* Active Filters */}
           {(selectedCategory || selectedGender) && (
             <div className="mt-6 flex flex-wrap items-center gap-3">
