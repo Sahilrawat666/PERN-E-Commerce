@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FiUser,
@@ -7,12 +8,62 @@ import {
   FiShoppingBag,
   FiArrowRight,
   FiLogOut,
+  FiEdit2,
 } from "react-icons/fi";
 import { useAuth } from "../src/context/AuthContext.jsx";
+import toast from "react-hot-toast";
 
 function Account() {
-  const { user, logout } = useAuth();
+  const { user, token, logout, updateUser } = useAuth();
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState(user?.name || "");
+  const [saving, setSaving] = useState(false);
 
+  // edit profile
+  const handleSaveProfile = async (event) => {
+    event.preventDefault();
+
+    if (!name.trim()) {
+      toast.error("Name is required.");
+      return;
+    }
+
+    try {
+      setSaving(true);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/users/profile`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name: name.trim(),
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to update profile.");
+      }
+
+      updateUser(data.user);
+      setName(data.user.name);
+      setEditing(false);
+
+      toast.success("Profile updated successfully.");
+    } catch (error) {
+      console.error("Update profile error:", error);
+
+      toast.error(error.message || "Failed to update profile.");
+    } finally {
+      setSaving(false);
+    }
+  };
   return (
     <main className="min-h-screen bg-[#f8f5f0]">
       {/* Header */}
@@ -49,13 +100,64 @@ function Account() {
                 </div>
               )}
 
-              <h2 className="mt-5 text-xl font-medium text-[#302923]">
-                {user?.name}
-              </h2>
+              {editing ? (
+                <form onSubmit={handleSaveProfile} className="mt-5 w-full">
+                  <label
+                    htmlFor="name"
+                    className="mb-2 block text-left text-xs uppercase tracking-[0.15em] text-[#81776e]"
+                  >
+                    Name
+                  </label>
 
-              <p className="mt-1 break-all text-sm text-[#81776e]">
-                {user?.email}
-              </p>
+                  <input
+                    id="name"
+                    type="text"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    className="w-full border border-[#d8d0c8] bg-[#fdfcfb] px-4 py-3 text-sm text-[#302923] outline-none transition focus:border-[#b08d57]"
+                  />
+
+                  <div className="mt-4 flex gap-2">
+                    <button
+                      type="submit"
+                      disabled={saving}
+                      className="flex-1 bg-[#241c18] px-4 py-3 text-sm font-medium text-white transition hover:bg-[#b08d57] disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {saving ? "Saving..." : "Save"}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditing(false);
+                        setName(user?.name || "");
+                      }}
+                      className="flex-1 border border-[#302923] px-4 py-3 text-sm text-[#302923] transition hover:bg-[#302923] hover:text-white"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <>
+                  <h2 className="mt-5 text-xl font-medium text-[#302923]">
+                    {user?.name}
+                  </h2>
+
+                  <p className="mt-1 break-all text-sm text-[#81776e]">
+                    {user?.email}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() => setEditing(true)}
+                    className="mt-5 cursor-pointer inline-flex items-center gap-2 text-sm font-medium text-[#302923] transition hover:text-[#b08d57]"
+                  >
+                    <FiEdit2 size={15} />
+                    Edit Profile
+                  </button>
+                </>
+              )}
             </div>
 
             <div className="mt-8 border-t border-[#e5ddd4] pt-6">

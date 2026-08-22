@@ -106,6 +106,12 @@ export function AuthProvider({ children }) {
     toast.success("Logged out successfully.");
   };
 
+  // updateUser
+  const updateUser = (updatedUser) => {
+    localStorage.setItem("Zenova_user", JSON.stringify(updatedUser));
+    setUser(updatedUser);
+  };
+
   const value = {
     user,
     token,
@@ -115,6 +121,7 @@ export function AuthProvider({ children }) {
     signup,
     googleLogin,
     logout,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
