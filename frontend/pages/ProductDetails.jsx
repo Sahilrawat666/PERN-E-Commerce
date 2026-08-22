@@ -9,6 +9,7 @@ import {
 } from "react-icons/fi";
 import { getProductById } from "../src/api/productApi.js";
 import { useCart } from "../src/context/CartContext.jsx";
+import { useWishlist } from "../src/context/WishlistContext.jsx";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -18,6 +19,9 @@ function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { addToCart } = useCart();
+  const { isInWishlist, toggleWishlist } = useWishlist();
+
+  const productInWishlist = product ? isInWishlist(product.id) : false;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -225,6 +229,7 @@ function ProductDetails() {
             )}
 
             {/* Actions */}
+            {/* add to cart and wishlist buttons */}
             <div className="mt-8 flex gap-3">
               <button
                 type="button"
@@ -238,10 +243,20 @@ function ProductDetails() {
 
               <button
                 type="button"
-                aria-label="Add to wishlist"
-                className="flex h-14 w-14 items-center justify-center border border-[#d8d0c8] text-[#302923] transition hover:border-[#302923]"
+                onClick={() => toggleWishlist(product)}
+                aria-label={
+                  productInWishlist ? "Remove from wishlist" : "Add to wishlist"
+                }
+                className={`flex h-14 w-14 items-center justify-center border transition ${
+                  productInWishlist
+                    ? "border-[#b08d57] bg-[#b08d57] text-white"
+                    : "border-[#d8d0c8] text-[#302923] hover:border-[#302923]"
+                }`}
               >
-                <FiHeart size={19} />
+                <FiHeart
+                  size={19}
+                  fill={productInWishlist ? "currentColor" : "none"}
+                />
               </button>
             </div>
 

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { FiHeart, FiShoppingBag, FiStar } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -61,7 +60,6 @@ function ProductCard({ product }) {
             type="button"
             onClick={() => {
               addToCart(product);
-              toast.success("Added to cart");
             }}
             className="flex w-full items-center justify-center gap-2 bg-[#241c18] py-3.5 text-sm font-medium text-white transition-colors hover:bg-[#b08d57]"
           >

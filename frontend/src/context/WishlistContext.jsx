@@ -1,12 +1,11 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "./AuthContext.jsx";
+import {
+  getWishlist,
+  addWishlistItem,
+  removeWishlistItem,
+} from "../api/wishlistApi.js";
 
 const WishlistContext = createContext(null);
 
@@ -16,42 +15,7 @@ export function WishlistProvider({ children }) {
   const [wishlist, setWishlist] = useState([]);
   const [wishlistLoading, setWishlistLoading] = useState(false);
 
-  const fetchWishlist = useCallback(async () => {
-    if (!token) {
-      setWishlist([]);
-      return;
-    }
-
-    try {
-      setWishlistLoading(true);
-
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/wishlist`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch wishlist.");
-      }
-
-      setWishlist(data.wishlist || []);
-    } catch (error) {
-      console.error("Failed to fetch wishlist:", error);
-      toast.error(error.message || "Failed to load wishlist.");
-      setWishlist([]);
-    } finally {
-      setWishlistLoading(false);
-    }
-  }, [token]);
-
-  // Load wishlist whenever authentication is ready
-  // or when the logged-in user changes.
+  // Load user's wishlist from database
   useEffect(() => {
     if (authLoading) {
       return;
@@ -62,8 +26,23 @@ export function WishlistProvider({ children }) {
       return;
     }
 
-    fetchWishlist();
-  }, [authLoading, isAuthenticated, token, fetchWishlist]);
+    const loadWishlist = async () => {
+      try {
+        setWishlistLoading(true);
+
+        const data = await getWishlist(token);
+
+        setWishlist(data.wishlist || []);
+      } catch (error) {
+        console.error("Failed to load wishlist:", error);
+        toast.error(error.message || "Failed to load wishlist.");
+      } finally {
+        setWishlistLoading(false);
+      }
+    };
+
+    loadWishlist();
+  }, [authLoading, isAuthenticated, token]);
 
   const isInWishlist = (productId) => {
     return wishlist.some((product) => product.id === productId);
@@ -71,37 +50,24 @@ export function WishlistProvider({ children }) {
 
   const addToWishlist = async (product) => {
     if (!isAuthenticated || !token) {
-      toast.error("Please sign in to add items to your wishlist.");
-      return;
-    }
-
-    // Prevent duplicate requests.
-    if (isInWishlist(product.id)) {
+      toast.error("Please sign in to add products to your wishlist.");
       return;
     }
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/wishlist/${product.id}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      await addWishlistItem(product.id, token);
 
-      const data = await response.json();
+      setWishlist((currentWishlist) => {
+        if (currentWishlist.some((item) => item.id === product.id)) {
+          return currentWishlist;
+        }
 
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to add to wishlist.");
-      }
-
-      setWishlist((currentWishlist) => [...currentWishlist, product]);
+        return [...currentWishlist, product];
+      });
 
       toast.success("Added to wishlist.");
     } catch (error) {
-      console.error("Add to wishlist error:", error);
+      console.error("Add wishlist error:", error);
       toast.error(error.message || "Failed to add to wishlist.");
     }
   };
@@ -112,21 +78,7 @@ export function WishlistProvider({ children }) {
     }
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/wishlist/${productId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to remove from wishlist.");
-      }
+      await removeWishlistItem(productId, token);
 
       setWishlist((currentWishlist) =>
         currentWishlist.filter((product) => product.id !== productId),
@@ -134,7 +86,7 @@ export function WishlistProvider({ children }) {
 
       toast.success("Removed from wishlist.");
     } catch (error) {
-      console.error("Remove from wishlist error:", error);
+      console.error("Remove wishlist error:", error);
       toast.error(error.message || "Failed to remove from wishlist.");
     }
   };
@@ -147,30 +99,26 @@ export function WishlistProvider({ children }) {
     }
   };
 
-  const clearWishlist = async () => {
+  const clearWishlist = () => {
     if (!isAuthenticated || !token) {
       return;
     }
 
-    try {
-      // Remove every item from the database.
-      await Promise.all(
-        wishlist.map((product) =>
-          fetch(`${import.meta.env.VITE_API_URL}/api/wishlist/${product.id}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }),
-        ),
-      );
+    const removeAll = async () => {
+      try {
+        await Promise.all(
+          wishlist.map((product) => removeWishlistItem(product.id, token)),
+        );
 
-      setWishlist([]);
-      toast.success("Wishlist cleared.");
-    } catch (error) {
-      console.error("Clear wishlist error:", error);
-      toast.error("Failed to clear wishlist.");
-    }
+        setWishlist([]);
+        toast.success("Wishlist cleared.");
+      } catch (error) {
+        console.error("Clear wishlist error:", error);
+        toast.error("Failed to clear wishlist.");
+      }
+    };
+
+    removeAll();
   };
 
   const value = {
@@ -182,7 +130,6 @@ export function WishlistProvider({ children }) {
     removeFromWishlist,
     toggleWishlist,
     clearWishlist,
-    refreshWishlist: fetchWishlist,
   };
 
   return (
