@@ -10,6 +10,8 @@ import {
 } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../src/context/AuthContext.jsx";
+import { useWishlist } from "../src/context/WishlistContext.jsx";
+import { useCart } from "../src/context/CartContext.jsx";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -24,6 +26,8 @@ function Navbar() {
   const [accountOpen, setAccountOpen] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
+  const { wishlist } = useWishlist();
+  const { cartCount } = useCart();
   const navigate = useNavigate();
   const accountRef = useRef(null);
 
@@ -210,9 +214,11 @@ function Navbar() {
           >
             <FiHeart size={20} strokeWidth={1.7} />
 
-            <span className="absolute right-1 top-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-[#b08d57] px-1 text-[9px] font-semibold text-white">
-              0
-            </span>
+            {wishlist.length > 0 && (
+              <span className="absolute right-1 top-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-[#b08d57] px-1 text-[9px] font-semibold text-white">
+                {wishlist.length}
+              </span>
+            )}
           </a>
 
           {/* Cart */}
@@ -223,9 +229,11 @@ function Navbar() {
           >
             <FiShoppingBag size={20} strokeWidth={1.7} />
 
-            <span className="absolute right-1 top-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-[#b08d57] px-1 text-[9px] font-semibold text-white">
-              0
-            </span>
+            {cartCount > 0 && (
+              <span className="absolute right-1 top-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-[#b08d57] px-1 text-[9px] font-semibold text-white">
+                {cartCount}
+              </span>
+            )}
           </a>
 
           {/* Mobile menu */}

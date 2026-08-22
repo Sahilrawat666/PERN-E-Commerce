@@ -2,9 +2,14 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { FiHeart, FiShoppingBag, FiStar } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { useWishlist } from "../src/context/WishlistContext.jsx";
+import { useCart } from "../src/context/CartContext.jsx";
+import toast from "react-hot-toast";
 
 function ProductCard({ product }) {
-  const [liked, setLiked] = useState(false);
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const productInWishlist = isInWishlist(product.id);
+  const { addToCart } = useCart();
 
   return (
     <motion.article
@@ -27,7 +32,7 @@ function ProductCard({ product }) {
 
         {/* Badge */}
         {product.badge && (
-          <span className="absolute left-4 top-4 bg-[#241c18] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-white">
+          <span className="absolute left-4 top-4  bg-[#241c18] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-white">
             {product.badge}
           </span>
         )}
@@ -35,21 +40,29 @@ function ProductCard({ product }) {
         {/* Wishlist */}
         <button
           type="button"
-          aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
-          onClick={() => setLiked((current) => !current)}
+          aria-label={
+            productInWishlist ? "Remove from wishlist" : "Add to wishlist"
+          }
+          onClick={() => toggleWishlist(product)}
           className={`absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-sm transition-all duration-300 ${
-            liked
+            productInWishlist
               ? "bg-[#b08d57] text-white"
               : "bg-white/90 text-[#302923] hover:bg-[#241c18] hover:text-white"
           }`}
         >
-          <FiHeart size={18} fill={liked ? "currentColor" : "none"} />
+          <FiHeart
+            size={18}
+            fill={productInWishlist ? "currentColor" : "none"}
+          />
         </button>
-
         {/* Add to cart */}
         <div className="absolute inset-x-4 bottom-4 translate-y-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
           <button
             type="button"
+            onClick={() => {
+              addToCart(product);
+              toast.success("Added to cart");
+            }}
             className="flex w-full items-center justify-center gap-2 bg-[#241c18] py-3.5 text-sm font-medium text-white transition-colors hover:bg-[#b08d57]"
           >
             <FiShoppingBag size={17} />
