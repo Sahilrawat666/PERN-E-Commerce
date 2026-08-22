@@ -15,6 +15,7 @@ import Cart from "../pages/Cart.jsx";
 import Checkout from "../pages/Checkout.jsx";
 import OrderConfirmation from "../pages/OrderConfirmation.jsx";
 import Orders from "../pages/Orders.jsx";
+import Account from "../pages/Account.jsx";
 
 function App() {
   return (
@@ -40,9 +41,7 @@ function App() {
           <Route path="/orders" element={<Orders />} />
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>
-            {/* <Route path="/account" element={<Accoun />} /> */}
-            {/* <Route path="/orders" element={<Orders />} /> */}
-            {/* <Route path="/wishlist" element={<Wishlis />} /> */}
+            <Route path="/account" element={<Account />} />
           </Route>
         </Routes>
       </main>

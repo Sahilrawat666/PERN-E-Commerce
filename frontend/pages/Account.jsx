@@ -1,93 +1,173 @@
-import React from "react";
-import { FiArrowLeft, FiMail, FiLock } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import {
+  FiUser,
+  FiMail,
+  FiPackage,
+  FiHeart,
+  FiShoppingBag,
+  FiArrowRight,
+  FiLogOut,
+} from "react-icons/fi";
+import { useAuth } from "../src/context/AuthContext.jsx";
 
 function Account() {
+  const { user, logout } = useAuth();
+
   return (
-    <main className="min-h-screen bg-[#f7f3ee] px-5 py-16 sm:px-8 lg:px-10">
-      <div className="mx-auto max-w-md">
-        <a
-          href="/"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-[#786f68] transition-colors hover:text-[#b08d57]"
-        >
-          <FiArrowLeft size={16} />
-          Back to ZENOVA
-        </a>
+    <main className="min-h-screen bg-[#f8f5f0]">
+      {/* Header */}
+      <section className="border-b border-[#ddd5cc] px-6 py-14 md:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <p className="text-xs uppercase tracking-[0.3em] text-[#b08d57]">
+            Account
+          </p>
 
-        <div className="bg-white p-7 shadow-[0_10px_40px_rgba(36,28,24,0.06)] sm:p-10">
-          <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b08d57]">
-              Welcome to
-            </p>
+          <h1 className="mt-3 text-3xl font-light tracking-tight text-[#302923] md:text-4xl">
+            Welcome, {user?.name}
+          </h1>
 
-            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[#241c18]">
-              ZENOVA
-            </h1>
-
-            <p className="mt-3 text-sm text-[#786f68]">
-              Sign in to access your account.
-            </p>
-          </div>
-
-          <form className="mt-8 space-y-5">
-            <div>
-              <label
-                htmlFor="email"
-                className="mb-2 block text-sm font-medium text-[#302923]"
-              >
-                Email
-              </label>
-
-              <div className="flex items-center gap-3 border border-[#d8cec3] px-4 py-3 focus-within:border-[#b08d57]">
-                <FiMail size={18} className="text-[#a49b92]" />
-
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  className="w-full bg-transparent text-sm text-[#241c18] outline-none placeholder:text-[#a49b92]"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="mb-2 block text-sm font-medium text-[#302923]"
-              >
-                Password
-              </label>
-
-              <div className="flex items-center gap-3 border border-[#d8cec3] px-4 py-3 focus-within:border-[#b08d57]">
-                <FiLock size={18} className="text-[#a49b92]" />
-
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  className="w-full bg-transparent text-sm text-[#241c18] outline-none placeholder:text-[#a49b92]"
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-[#241c18] py-3.5 text-sm font-medium text-white transition-colors hover:bg-[#b08d57]"
-            >
-              Sign In
-            </button>
-          </form>
-
-          <p className="mt-6 text-center text-sm text-[#786f68]">
-            Don't have an account?{" "}
-            <a
-              href="/signup"
-              className="font-medium text-[#b08d57] hover:text-[#927343]"
-            >
-              Create one
-            </a>
+          <p className="mt-3 text-sm text-[#81776e]">
+            Manage your account and view your activity.
           </p>
         </div>
-      </div>
+      </section>
+
+      <section className="px-6 py-12 md:px-10 lg:px-16">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[320px_1fr]">
+          {/* Profile */}
+          <aside className="h-fit border border-[#ddd5cc] bg-white p-6 sm:p-8">
+            <div className="flex flex-col items-center text-center">
+              {user?.avatar_url ? (
+                <img
+                  src={user.avatar_url}
+                  alt={user.name}
+                  className="h-24 w-24 rounded-full object-cover"
+                />
+              ) : (
+                <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#eee7df] text-[#b08d57]">
+                  <FiUser size={36} strokeWidth={1.5} />
+                </div>
+              )}
+
+              <h2 className="mt-5 text-xl font-medium text-[#302923]">
+                {user?.name}
+              </h2>
+
+              <p className="mt-1 break-all text-sm text-[#81776e]">
+                {user?.email}
+              </p>
+            </div>
+
+            <div className="mt-8 border-t border-[#e5ddd4] pt-6">
+              <div className="flex items-center gap-3 text-sm">
+                <FiUser className="text-[#b08d57]" size={17} />
+
+                <span className="text-[#81776e]">Name</span>
+
+                <span className="ml-auto text-right text-[#302923]">
+                  {user?.name}
+                </span>
+              </div>
+
+              <div className="mt-5 flex items-start gap-3 text-sm">
+                <FiMail className="mt-0.5 text-[#b08d57]" size={17} />
+
+                <span className="text-[#81776e]">Email</span>
+
+                <span className="ml-auto max-w-[160px] break-all text-right text-[#302923]">
+                  {user?.email}
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={logout}
+              className="mt-8 flex w-full cursor-pointer items-center justify-center gap-2 border border-[#302923] px-5 py-3 text-sm font-medium text-[#302923] transition-colors hover:bg-[#302923] hover:text-white"
+            >
+              <FiLogOut size={17} />
+              Logout
+            </button>
+          </aside>
+
+          {/* Account Options */}
+          <div>
+            <h2 className="text-xl font-medium text-[#302923]">
+              Account Overview
+            </h2>
+
+            <div className="mt-6 grid gap-5 sm:grid-cols-2">
+              {/* Orders */}
+              <Link
+                to="/orders"
+                className="group border border-[#ddd5cc] bg-white p-6 transition hover:border-[#b08d57]"
+              >
+                <div className="flex h-12 w-12 items-center justify-center bg-[#f8f5f0] text-[#b08d57]">
+                  <FiPackage size={21} />
+                </div>
+
+                <h3 className="mt-5 text-lg font-medium text-[#302923]">
+                  My Orders
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-[#81776e]">
+                  View your order history and track your purchases.
+                </p>
+
+                <div className="mt-5 flex items-center gap-2 text-sm font-medium text-[#302923] group-hover:text-[#b08d57]">
+                  View Orders
+                  <FiArrowRight size={16} />
+                </div>
+              </Link>
+
+              {/* Wishlist */}
+              <Link
+                to="/wishlist"
+                className="group border border-[#ddd5cc] bg-white p-6 transition hover:border-[#b08d57]"
+              >
+                <div className="flex h-12 w-12 items-center justify-center bg-[#f8f5f0] text-[#b08d57]">
+                  <FiHeart size={21} />
+                </div>
+
+                <h3 className="mt-5 text-lg font-medium text-[#302923]">
+                  Wishlist
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-[#81776e]">
+                  View the products you've saved for later.
+                </p>
+
+                <div className="mt-5 flex items-center gap-2 text-sm font-medium text-[#302923] group-hover:text-[#b08d57]">
+                  View Wishlist
+                  <FiArrowRight size={16} />
+                </div>
+              </Link>
+
+              {/* Cart */}
+              <Link
+                to="/cart"
+                className="group border border-[#ddd5cc] bg-white p-6 transition hover:border-[#b08d57]"
+              >
+                <div className="flex h-12 w-12 items-center justify-center bg-[#f8f5f0] text-[#b08d57]">
+                  <FiShoppingBag size={21} />
+                </div>
+
+                <h3 className="mt-5 text-lg font-medium text-[#302923]">
+                  Shopping Bag
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-[#81776e]">
+                  Review the products currently in your shopping bag.
+                </p>
+
+                <div className="mt-5 flex items-center gap-2 text-sm font-medium text-[#302923] group-hover:text-[#b08d57]">
+                  View Bag
+                  <FiArrowRight size={16} />
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
