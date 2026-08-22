@@ -12,6 +12,9 @@ import ProductDetails from "../pages/ProductDetails";
 import Collections from "../pages/Collections";
 import Wishlist from "../pages/Wishlist";
 import Cart from "../pages/Cart.jsx";
+import Checkout from "../pages/Checkout.jsx";
+import OrderConfirmation from "../pages/OrderConfirmation.jsx";
+import Orders from "../pages/Orders.jsx";
 
 function App() {
   return (
@@ -29,6 +32,12 @@ function App() {
           <Route path="/collections" element={<Collections />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route
+            path="/order-confirmation/:orderId"
+            element={<OrderConfirmation />}
+          />
+          <Route path="/orders" element={<Orders />} />
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>
             {/* <Route path="/account" element={<Accoun />} /> */}

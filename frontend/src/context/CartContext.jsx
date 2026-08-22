@@ -17,7 +17,7 @@ function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [cartLoading, setCartLoading] = useState(false);
 
-  // Fetch logged-in user's cart
+  // Fetch user's cart from backend
   const fetchCart = useCallback(async () => {
     if (!token) {
       setCart([]);
@@ -42,30 +42,30 @@ function CartProvider({ children }) {
       setCart(data.cart || []);
     } catch (error) {
       console.error("Fetch cart error:", error);
-
-      toast.error(error.message || "Failed to load cart.");
+      setCart([]);
     } finally {
       setCartLoading(false);
     }
   }, [token]);
 
-  // Load cart after authentication is ready
+  // Load cart whenever authentication is ready/user changes
   useEffect(() => {
     if (authLoading) {
       return;
     }
 
-    if (isAuthenticated) {
-      fetchCart();
-    } else {
+    if (!isAuthenticated) {
       setCart([]);
+      return;
     }
+
+    fetchCart();
   }, [authLoading, isAuthenticated, fetchCart]);
 
   // Add product to cart
   const addToCart = async (product) => {
-    if (!isAuthenticated || !token) {
-      toast.error("Please sign in to add products to your cart.");
+    if (!token) {
+      toast.error("Please login to add items to your cart.");
       return;
     }
 
@@ -86,20 +86,18 @@ function CartProvider({ children }) {
         throw new Error(data.message || "Failed to add product to cart.");
       }
 
-      // Refresh cart from database
       await fetchCart();
 
-      toast.success("Added to cart.");
+      toast.success(data.message || "Product added to cart.");
     } catch (error) {
       console.error("Add to cart error:", error);
-
       toast.error(error.message || "Failed to add product to cart.");
     }
   };
 
   // Remove product from cart
   const removeFromCart = async (productId) => {
-    if (!isAuthenticated || !token) {
+    if (!token) {
       return;
     }
 
@@ -124,17 +122,16 @@ function CartProvider({ children }) {
         currentCart.filter((item) => item.product_id !== productId),
       );
 
-      toast.success("Removed from cart.");
+      toast.success(data.message || "Product removed from cart.");
     } catch (error) {
       console.error("Remove from cart error:", error);
-
       toast.error(error.message || "Failed to remove product.");
     }
   };
 
   // Update quantity
   const updateQuantity = async (productId, quantity) => {
-    if (!isAuthenticated || !token) {
+    if (!token) {
       return;
     }
 
@@ -161,7 +158,7 @@ function CartProvider({ children }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to update quantity.");
+        throw new Error(data.message || "Failed to update cart.");
       }
 
       setCart((currentCart) =>
@@ -169,24 +166,24 @@ function CartProvider({ children }) {
           item.product_id === productId
             ? {
                 ...item,
-                quantity,
+                quantity: data.cartItem.quantity,
               }
             : item,
         ),
       );
     } catch (error) {
-      console.error("Update cart quantity error:", error);
+      console.error("Update cart error:", error);
+      toast.error(error.message || "Failed to update cart.");
 
-      toast.error(error.message || "Failed to update quantity.");
-
-      // Reload database state if update failed
+      // Refresh from server in case the local state became stale
       await fetchCart();
     }
   };
 
   // Clear entire cart
   const clearCart = async () => {
-    if (!isAuthenticated || !token) {
+    if (!token) {
+      setCart([]);
       return;
     }
 
@@ -204,27 +201,28 @@ function CartProvider({ children }) {
         throw new Error(data.message || "Failed to clear cart.");
       }
 
+      // Clear React state immediately
       setCart([]);
-
-      toast.success("Cart cleared.");
     } catch (error) {
       console.error("Clear cart error:", error);
-
       toast.error(error.message || "Failed to clear cart.");
     }
   };
 
-  // Total number of products
+  // clear cart
+  const clearCartState = () => {
+    setCart([]);
+  };
+
   const cartCount = useMemo(
-    () => cart.reduce((total, item) => total + item.quantity, 0),
+    () => cart.reduce((total, item) => total + Number(item.quantity), 0),
     [cart],
   );
 
-  // Cart subtotal
   const cartSubtotal = useMemo(
     () =>
       cart.reduce(
-        (total, item) => total + Number(item.price) * item.quantity,
+        (total, item) => total + Number(item.price) * Number(item.quantity),
         0,
       ),
     [cart],
@@ -239,6 +237,7 @@ function CartProvider({ children }) {
     removeFromCart,
     updateQuantity,
     clearCart,
+    clearCartState,
     fetchCart,
   };
 

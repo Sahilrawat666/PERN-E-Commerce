@@ -189,12 +189,12 @@ function Cart() {
                 </span>
               </div>
 
-              <button
-                type="button"
-                className="mt-7 w-full cursor-pointer bg-[#241c18] py-4 text-sm font-medium text-white transition-colors hover:bg-[#b08d57]"
+              <Link
+                to="/checkout"
+                className="mt-7 flex w-full items-center justify-center bg-[#241c18] py-4 text-sm font-medium text-white transition-colors hover:bg-[#b08d57]"
               >
                 Proceed to Checkout
-              </button>
+              </Link>
 
               <p className="mt-4 text-center text-xs leading-5 text-[#81776e]">
                 Free shipping on orders above ₹2,000.
